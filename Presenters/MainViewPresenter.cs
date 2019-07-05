@@ -39,7 +39,7 @@ namespace LineClippingWindow.Presenters
             {
                 if (prevPoint != null)
                 {
-                    if (_clippingWindow.isSegmentIntersectsWindow(prevPoint, point))
+                    if (_clippingWindow.IsSegmentIntersectsWindow(prevPoint, point))
                     {
                         selected.Add(prevPoint);
                         selected.Add(point);

@@ -8,7 +8,7 @@ namespace LineClippingWindow.Models
 {
     public interface IClippingWindow
     {
-        bool isPointInWindow(Point point);
-        bool isSegmentIntersectsWindow(Point A, Point B);
+        bool IsPointInWindow(Point point);
+        bool IsSegmentIntersectsWindow(Point A, Point B);
     }
 }

@@ -38,13 +38,13 @@ namespace LineClippingWindow.Models
         }
 
         //находится ли точка внутри прямоугольника или на его стороне
-        public bool isPointInWindow(Point point)
+        public bool IsPointInWindow(Point point)
         {
             return point.X >= xmin && point.X <= xmax && point.Y >= ymin && point.Y <= ymax;
         }
 
         //проверка на пересечение отрезком одной из сторон прямоугольника
-        private bool isSegmentIntersectsSide(Point A, Point B, Point S1, Point S2)
+        private bool IsSegmentIntersectsSide(Point A, Point B, Point S1, Point S2)
         {
             //граничный случай: отрезки лежат на одной прямой
             if ((A.X == B.X && S1.X == S2.X && A.X == S1.X) || (A.Y == B.Y && S1.Y == S2.Y && A.Y == S1.Y))
@@ -55,16 +55,20 @@ namespace LineClippingWindow.Models
             int as1s2 = (S2.X - S1.X) * (A.Y - S1.Y) - (S2.Y - S1.Y) * (A.X - S1.X);
             int bs1s2 = (S2.X - S1.X) * (B.Y - S1.Y) - (S2.Y - S1.Y) * (B.X - S1.X);
 
-            return as1s2 * bs1s2 <= 0 && abs2 * abs1 <= 0;
+            // векторные произведения должны быть разных знаков, 
+            // это означает, что конца одного отрезка находятся по разные стороны от другого
+            // может быть переполнение, поэтому применяется Math.Sign
+            return (Math.Sign(as1s2) != Math.Sign(bs1s2) || as1s2 == 0 || bs1s2 == 0) 
+                && (Math.Sign(abs2) != Math.Sign(abs1) || abs2 == 0 || abs1 == 0);
         }
 
-        public bool isSegmentIntersectsWindow(Point A, Point B)
+        public bool IsSegmentIntersectsWindow(Point A, Point B)
         {
-            if (isPointInWindow(A) || isPointInWindow(B))
+            if (IsPointInWindow(A) || IsPointInWindow(B))
                 return true;
-            if (isSegmentIntersectsSide(A, B, TopLeft, TopRight) || isSegmentIntersectsSide(A, B, BottomLeft, BottomRight))
+            if (IsSegmentIntersectsSide(A, B, TopLeft, TopRight) || IsSegmentIntersectsSide(A, B, BottomLeft, BottomRight))
                 return true;
-            if (isSegmentIntersectsSide(A, B, TopLeft, BottomLeft) || isSegmentIntersectsSide(A, B, TopRight, BottomRight))
+            if (IsSegmentIntersectsSide(A, B, TopLeft, BottomLeft) || IsSegmentIntersectsSide(A, B, TopRight, BottomRight))
                 return true;
             return false;
         }
